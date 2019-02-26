@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "1037241554400",
+    "firebase_url": "https://clinica-sorriso.firebaseio.com",
+    "project_id": "clinica-sorriso",
+    "storage_bucket": "clinica-sorriso.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1037241554400:android:3fa7d5a7fd5e2fb2",
+        "android_client_info": {
+          "package_name": "br.com.donart.clinicasorriso"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1037241554400-vr2bnads49k8gnn6f9ojmj3i5r4v0c71.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBKuTUEuhu09nx-dEIJHvP5DftrT2jsmrQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
