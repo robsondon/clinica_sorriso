@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:clinica_sorriso/login.dart';
+import 'package:clinica_sorriso/cadastro.dart';
+import 'package:clinica_sorriso/signup_screen.dart';
+import 'package:clinica_sorriso/interface/profile.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 void main() {
   runApp(MaterialApp(
@@ -29,8 +34,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final googleSignIn = GoogleSignIn();
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xFFF1F9FF),
@@ -133,7 +140,9 @@ class _HomePageState extends State<HomePage> {
               ),
               child: RaisedButton(
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50.0)),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => SignUpScreen()));
+                },
                 color: Color(0xFF2699FB),
                 child: Text(
                   "Cadastre-se",
@@ -163,9 +172,8 @@ class _HomePageState extends State<HomePage> {
               ),
               child: RaisedButton(
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50.0)),
-                onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
-                },
+                onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));},
+
                 color: Color(0xFF2699FB),
                 child: Text(
                   "Login",
@@ -186,4 +194,17 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
+
+
+    void initState() {
+      super.initState();
+        FirebaseAuth.instance.onAuthStateChanged.listen((firebaseUser) {
+          if(firebaseUser.displayName != null) {
+            Navigator.push(context, MaterialPageRoute(builder: (context) => Profile()));
+          }
+        return firebaseUser;
+      });
+    }
+
 }

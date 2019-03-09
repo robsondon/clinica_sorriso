@@ -1,3 +1,5 @@
+import 'package:clinica_sorriso/interface/profile.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -13,12 +15,24 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login>  {
   bool _obscureText = true;
-
   final googleSignIn = GoogleSignIn();
   final auth = FirebaseAuth.instance;
+  GoogleSignInAccount _currentUser;
 
+  void initState() {
+    super.initState();
+    googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount account) {
+      setState(() {
+        _currentUser = account;
+      });
+      if (_currentUser != null) {
+      }
+    });
+    googleSignIn.signInSilently();
+  }
 
   Future<Null> _facebookLogin() async{
+
     final facebookLogin = FacebookLogin();
     final result = await facebookLogin.logInWithReadPermissions(['email']);
 
@@ -35,22 +49,22 @@ class _LoginState extends State<Login>  {
     }
   }
 
-
-
-
-
   Future<FirebaseUser> _ensureLoggedIn() async {
     final GoogleSignInAccount googleUser = await googleSignIn.signIn();
-    final GoogleSignInAuthentication googleAuth =
-        await googleUser.authentication;
-
+    final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
     final AuthCredential credential = GoogleAuthProvider.getCredential(
       accessToken: googleAuth.accessToken,
       idToken: googleAuth.idToken,
     );
 
     final FirebaseUser user = await auth.signInWithCredential(credential);
-    print("Logado como " + user.displayName);
+   if(user != null){
+      Firestore.instance.collection('users').document(user.uid).setData({
+        'nome': user.displayName,
+        'email': user.email,
+        'photo': user.photoUrl
+      });
+    }
     return user;
   }
 
@@ -132,7 +146,9 @@ class _LoginState extends State<Login>  {
                           borderSide: BorderSide(color: Colors.white)),
                       enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(25),
-                          borderSide: BorderSide(color: Colors.white)),
+                          borderSide:  BorderSide(color: Colors.white),
+
+                      ),
                       fillColor: Colors.white,
                       filled: true,
                       hintText: "Nome de usuário",
@@ -289,5 +305,6 @@ class _LoginState extends State<Login>  {
             ),
           ),
         ));
-  }
+    }
+
 }
