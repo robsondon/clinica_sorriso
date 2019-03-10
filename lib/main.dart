@@ -199,12 +199,13 @@ class _HomePageState extends State<HomePage> {
 
     void initState() {
       super.initState();
+      setState(() {
         FirebaseAuth.instance.onAuthStateChanged.listen((firebaseUser) {
-          if(firebaseUser.displayName != null) {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => Profile()));
-          }
+            if(firebaseUser.displayName != null) {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => Profile()));
+            }
         return firebaseUser;
+        });
       });
     }
-
 }

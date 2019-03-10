@@ -50,7 +50,7 @@ class _LoginState extends State<Login>  {
   }
 
   Future<FirebaseUser> _ensureLoggedIn() async {
-    final GoogleSignInAccount googleUser = await googleSignIn.signIn();
+   final GoogleSignInAccount googleUser = await googleSignIn.signIn();
     final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
     final AuthCredential credential = GoogleAuthProvider.getCredential(
       accessToken: googleAuth.accessToken,
@@ -65,6 +65,7 @@ class _LoginState extends State<Login>  {
         'photo': user.photoUrl
       });
     }
+    Navigator.push(context, MaterialPageRoute(builder: (context) => Profile()));
     return user;
   }
 
