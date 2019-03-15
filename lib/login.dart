@@ -5,6 +5,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:clinica_sorriso/db/conn.dart';
 
 class Login extends StatefulWidget {
   final Login login;
@@ -18,6 +20,9 @@ class _LoginState extends State<Login>  {
   final googleSignIn = GoogleSignIn();
   final auth = FirebaseAuth.instance;
   GoogleSignInAccount _currentUser;
+
+  final notesReference = FirebaseDatabase.instance.reference().child('Users');
+
 
   void initState() {
     super.initState();
@@ -59,11 +64,22 @@ class _LoginState extends State<Login>  {
 
     final FirebaseUser user = await auth.signInWithCredential(credential);
    if(user != null){
+
       Firestore.instance.collection('users').document(user.uid).setData({
         'nome': user.displayName,
         'email': user.email,
         'photo': user.photoUrl
       });
+
+      notesReference.push().set({
+        'nome': user.displayName,
+        'email': user.email,
+        'photo': user.photoUrl
+      });
+
+      final saveUser = mysqlConn().saveUser(user.displayName, user.email, 'padrao', user.uid);
+      saveUser;
+
     }
     Navigator.push(context, MaterialPageRoute(builder: (context) => Profile()));
     return user;
